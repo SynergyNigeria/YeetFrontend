@@ -1,0 +1,286 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Animations */
+@keyframes blob {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(20px, -50px) scale(1.1); }
+  50% { transform: translate(-20px, 20px) scale(0.9); }
+  75% { transform: translate(50px, 50px) scale(1.05); }
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+@keyframes slide-in-down {
+  from { transform: translateY(-100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slide-in-up {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fade-in-scale {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes bounce-icon {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Utility Classes */
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+.animation-delay-200 {
+  animation-delay: 200ms;
+}
+
+.animation-delay-400 {
+  animation-delay: 400ms;
+}
+
+.animation-direction-reverse {
+  animation-direction: reverse;
+}
+
+.duration-2000 {
+  animation-duration: 2s;
+}
+
+.duration-3000 {
+  animation-duration: 3s;
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-bounce-icon {
+  animation: bounce-icon 1s ease-in-out infinite;
+}
+
+.animate-slide-in-down {
+  animation: slide-in-down 0.5s ease-out;
+}
+
+.animate-slide-in-up {
+  animation: slide-in-up 0.5s ease-out;
+}
+
+.animate-fade-in-scale {
+  animation: fade-in-scale 0.5s ease-out;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
+}
+
+.animate-shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 3s linear infinite;
+}
+
+/* Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background-color: #FAF9F6;
+  color: #2c3968;
+  line-height: 1.5;
+}
+
+/* Custom Component Styles */
+.btn {
+  @apply px-4 py-2 rounded-lg font-medium transition-all duration-200 cursor-pointer;
+}
+
+.btn-primary {
+  @apply bg-[#2c3968] text-[#FAF9F6] hover:bg-opacity-90 active:scale-95;
+}
+
+.btn-secondary {
+  @apply bg-gray-200 text-[#2c3968] hover:bg-gray-300 active:scale-95;
+}
+
+.btn-danger {
+  @apply bg-red-600 text-white hover:bg-red-700 active:scale-95;
+}
+
+.btn-success {
+  @apply bg-green-600 text-white hover:bg-green-700 active:scale-95;
+}
+
+.btn-disabled {
+  @apply bg-gray-300 text-gray-500 cursor-not-allowed opacity-50;
+}
+
+.btn-lg {
+  @apply px-6 py-3 text-lg;
+}
+
+.btn-sm {
+  @apply px-2 py-1 text-sm;
+}
+
+.card {
+  @apply bg-white rounded-xl shadow-md p-6 transition-all duration-300;
+}
+
+.card:hover {
+  @apply shadow-lg;
+}
+
+.input-field {
+  @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2c3968] focus:border-transparent transition-all duration-200;
+}
+
+.input-field:disabled {
+  @apply bg-gray-100 text-gray-500 cursor-not-allowed;
+}
+
+.label {
+  @apply block text-sm font-medium text-[#2c3968] mb-2;
+}
+
+.error-message {
+  @apply text-red-600 text-sm font-medium mt-1;
+}
+
+.success-message {
+  @apply text-green-600 text-sm font-medium mt-1;
+}
+
+.badge {
+  @apply inline-block px-3 py-1 rounded-full text-sm font-medium;
+}
+
+.badge-primary {
+  @apply bg-[#2c3968] bg-opacity-10 text-[#2c3968];
+}
+
+.badge-success {
+  @apply bg-green-100 text-green-800;
+}
+
+.badge-warning {
+  @apply bg-yellow-100 text-yellow-800;
+}
+
+.badge-danger {
+  @apply bg-red-100 text-red-800;
+}
+
+.divider {
+  @apply border-t border-gray-200;
+}
+
+.loading-spinner {
+  @apply inline-block animate-spin;
+}
+
+/* Responsive Utilities */
+@media (max-width: 640px) {
+  .container-sm {
+    @apply px-4;
+  }
+}
+
+/* Print Styles */
+@media print {
+  body {
+    @apply bg-white;
+  }
+
+  .btn,
+  .no-print {
+    @apply hidden;
+  }
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-400 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-600;
+}
