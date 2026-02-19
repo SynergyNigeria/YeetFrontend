@@ -61,9 +61,8 @@ out
 .nuxt
 dist
 
-# Gatsby files
+# Gatsby files (public folder is needed for React)
 .cache/
-public
 
 # Storybook build outputs
 .out
