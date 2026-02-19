@@ -1,9 +1,8 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import { DEMO_CREDENTIALS, DEMO_LOGIN_INFO } from '../constants/demoCredentials';
 import toast from 'react-hot-toast';
-import { Mail, Lock, Eye, EyeOff, Phone, CreditCard, Copy, Check } from 'react-feather';
+import { Mail, Lock, Eye, EyeOff, Phone, CreditCard } from 'react-feather';
 
 const Login = () => {
   const [loginMethod, setLoginMethod] = useState('email');
@@ -11,7 +10,6 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [copiedIndex, setCopiedIndex] = useState(null);
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -28,12 +26,6 @@ const Login = () => {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const copyToClipboard = (text, index) => {
-    navigator.clipboard.writeText(text);
-    setCopiedIndex(index);
-    setTimeout(() => setCopiedIndex(null), 2000);
   };
 
   return (
@@ -200,59 +192,6 @@ const Login = () => {
             >
               ← Back to Home
             </Link>
-          </div>
-        </div>
-
-        {/* Demo Credentials Section */}
-        <div className="mt-8 bg-white/10 backdrop-blur-md rounded-2xl shadow-lg p-6 border border-white/20">
-          <div className="text-center mb-4">
-            <p className="text-white text-sm font-semibold mb-2">🧪 Demo Credentials (Frontend Development)</p>
-            <p className="text-white/70 text-xs">{DEMO_LOGIN_INFO.description}</p>
-          </div>
-          
-          <div className="space-y-2">
-            {DEMO_CREDENTIALS.map((cred, index) => (
-              <div key={index} className="bg-white/5 rounded-lg p-3 border border-white/10 hover:bg-white/10 transition-all">
-                <div className="flex items-center justify-between gap-2 mb-2">
-                  <div className="text-left flex-1 min-w-0">
-                    <p className="text-white text-xs font-semibold truncate">{cred.name}</p>
-                    <p className="text-white/50 text-xs truncate">{cred.accountType}</p>
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-2 gap-2 text-xs mb-2">
-                  <div className="bg-white/5 rounded p-2">
-                    <p className="text-white/50">Email</p>
-                    <p className="text-white font-mono text-xs truncate">{cred.email}</p>
-                  </div>
-                  <div className="bg-white/5 rounded p-2">
-                    <p className="text-white/50">Password</p>
-                    <p className="text-white font-mono text-xs">{cred.password}</p>
-                  </div>
-                </div>
-
-                <button
-                  onClick={() => {
-                    setLoginMethod('email');
-                    setIdentifier(cred.email);
-                    setPassword(cred.password);
-                    copyToClipboard(cred.email, `email-${index}`);
-                    toast.success('Credentials loaded! Scroll up to login.');
-                  }}
-                  className="w-full py-2 px-3 bg-[#2c3968]/30 hover:bg-[#2c3968]/50 text-white text-xs rounded-lg transition-all flex items-center justify-center gap-1"
-                >
-                  {copiedIndex === `email-${index}` ? (
-                    <>
-                      <Check size={14} /> Loaded
-                    </>
-                  ) : (
-                    <>
-                      <Copy size={14} /> Use This Account
-                    </>
-                  )}
-                </button>
-              </div>
-            ))}
           </div>
         </div>
 
