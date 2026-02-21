@@ -35,6 +35,27 @@ export async function registerServiceWorker() {
   }
 }
 
+// Wait for a SW registration to have an active worker
+function waitForActiveServiceWorker(registration) {
+  return new Promise((resolve) => {
+    if (registration.active) {
+      resolve(registration);
+      return;
+    }
+    const sw = registration.installing || registration.waiting;
+    if (!sw) {
+      resolve(registration);
+      return;
+    }
+    sw.addEventListener('statechange', function handler() {
+      if (registration.active) {
+        sw.removeEventListener('statechange', handler);
+        resolve(registration);
+      }
+    });
+  });
+}
+
 // Request notification permission
 export async function requestNotificationPermission() {
   if (!('Notification' in window)) {
@@ -136,12 +157,14 @@ export async function removeSubscriptionFromServer(subscription, api) {
 // Initialize push notifications
 export async function initializePushNotifications(api) {
   try {
-    const registration = await registerServiceWorker();
+    let registration = await registerServiceWorker();
     
     if (!registration) {
-      console.log('Service Worker not supported');
       return null;
     }
+
+    // Wait until the SW is fully active before attempting to subscribe
+    registration = await waitForActiveServiceWorker(registration);
 
     const subscription = await subscribeToPushNotifications(registration);
     

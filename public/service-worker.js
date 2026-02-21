@@ -1,18 +1,15 @@
 /* eslint-disable no-restricted-globals */
 
 // Service Worker for Yeet Bank PWA
-const CACHE_NAME = 'yeet-bank-v1';
-const urlsToCache = [
-  '/',
-  '/static/css/main.css',
-  '/static/js/main.js',
-];
+const CACHE_NAME = 'yeet-bank-v2';
 
-// Install Service Worker
+// Install - only cache the root, skip hashed static files to avoid addAll failures
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => cache.addAll(urlsToCache))
+    caches.open(CACHE_NAME).then((cache) => {
+      // Only cache the app shell root — not hashed filenames which may not exist yet
+      return cache.add('/').catch(() => null);
+    })
   );
   self.skipWaiting();
 });
