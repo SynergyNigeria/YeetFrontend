@@ -42,6 +42,10 @@ api.interceptors.response.use(
         });
 
         localStorage.setItem('access_token', response.data.access);
+        // Save rotated refresh token if the backend returns one
+        if (response.data.refresh) {
+          localStorage.setItem('refresh_token', response.data.refresh);
+        }
 
         originalRequest.headers.Authorization = `Bearer ${response.data.access}`;
         return api(originalRequest);
