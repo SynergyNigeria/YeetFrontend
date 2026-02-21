@@ -1,0 +1,435 @@
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import LanguageDetector from 'i18next-browser-languagedetector';
+
+// Translation resources
+const resources = {
+  en: {
+    translation: {
+      // Navigation
+      "Dashboard": "Dashboard",
+      "Transfer": "Transfer",
+      "Chat": "Chat",
+      "Settings": "Settings",
+      "Logout": "Logout",
+
+      // Auth
+      "Login": "Login",
+      "Register": "Register",
+      "Email": "Email",
+      "Password": "Password",
+      "Confirm Password": "Confirm Password",
+      "First Name": "First Name",
+      "Last Name": "Last Name",
+      "Phone": "Phone",
+      "Welcome back": "Welcome back",
+      "Create Account": "Create Account",
+
+      // Dashboard
+      "Account Balance": "Account Balance",
+      "Recent Transactions": "Recent Transactions",
+      "Transfer Money": "Transfer Money",
+      "View All": "View All",
+      "Notifications": "Notifications",
+
+      // Common
+      "Loading": "Loading",
+      "Error": "Error",
+      "Success": "Success",
+      "Cancel": "Cancel",
+      "Confirm": "Confirm",
+      "Save": "Save",
+      "Delete": "Delete",
+      "Edit": "Edit",
+      "Back": "Back",
+      "Next": "Next",
+      "Submit": "Submit",
+
+      // Language selector
+      "Language": "Language",
+      "Select Language": "Select Language",
+
+      // External Transfer
+      "Please fill in all required recipient details": "Please fill in all required recipient details",
+      "Account number too short": "Account number too short",
+      "Enter valid amount": "Enter valid amount",
+      "Insufficient balance. Required:": "Insufficient balance. Required:",
+      "including": "including",
+      "fee": "fee",
+      "Enter 4-digit PIN": "Enter 4-digit PIN",
+      "External transfer to": "External transfer to",
+      "at": "at",
+      "External transfer completed!": "External transfer completed!",
+      "Transfer failed": "Transfer failed",
+      "External transfer failed. Please try again.": "External transfer failed. Please try again.",
+      "External Transfer Completed!": "External Transfer Completed!",
+      "sent to": "sent to",
+      "Processing Fee:": "Processing Fee:",
+      "New Balance:": "New Balance:",
+      "Redirecting...": "Redirecting...",
+      "External Transfer": "External Transfer",
+      "Send to external bank accounts": "Send to external bank accounts",
+      "Sending from": "Sending from",
+      "Available:": "Available:",
+      "Recipient Name": "Recipient Name",
+      "Full name of recipient": "Full name of recipient",
+      "Bank Name": "Bank Name",
+      "e.g., Chase Bank, Wells Fargo, Bank of America": "e.g., Chase Bank, Wells Fargo, Bank of America",
+      "Account Number": "Account Number",
+      "Enter recipient's account number": "Enter recipient's account number",
+      "Usually 8-17 digits long": "Usually 8-17 digits long",
+      "Routing Number (Optional)": "Routing Number (Optional)",
+      "9-digit routing number": "9-digit routing number",
+      "Continue": "Continue",
+      "Sending to:": "Sending to:",
+      "Amount": "Amount",
+      "External Transfer Fee:": "External Transfer Fee:",
+      "Total Deducted:": "Total Deducted:",
+      "Message (Optional)": "Message (Optional)",
+      "Purpose of transfer": "Purpose of transfer",
+      "Transfer Summary": "Transfer Summary",
+      "Recipient": "Recipient",
+      "Bank": "Bank",
+      "Account": "Account",
+      "Processing Fee": "Processing Fee",
+      "Total": "Total",
+      "Enter Transfer PIN": "Enter Transfer PIN",
+      "4-digit PIN": "4-digit PIN",
+      "Processing...": "Processing...",
+      "Send External Transfer": "Send External Transfer",
+
+      // PWA Install
+      "Install Yeet Bank": "Install Yeet Bank",
+      "Add to your home screen for quick access": "Add to your home screen for quick access",
+      "Tap the share icon then \"Add to Home Screen\"": "Tap the share icon then \"Add to Home Screen\"",
+      "Install": "Install",
+    }
+  },
+  es: {
+    translation: {
+      // Navigation
+      "Dashboard": "Panel de Control",
+      "Transfer": "Transferir",
+      "Chat": "Chat",
+      "Settings": "Configuración",
+      "Logout": "Cerrar Sesión",
+
+      // Auth
+      "Login": "Iniciar Sesión",
+      "Register": "Registrarse",
+      "Email": "Correo Electrónico",
+      "Password": "Contraseña",
+      "Confirm Password": "Confirmar Contraseña",
+      "First Name": "Nombre",
+      "Last Name": "Apellido",
+      "Phone": "Teléfono",
+      "Welcome back": "Bienvenido de vuelta",
+      "Create Account": "Crear Cuenta",
+
+      // Dashboard
+      "Account Balance": "Saldo de Cuenta",
+      "Recent Transactions": "Transacciones Recientes",
+      "Transfer Money": "Transferir Dinero",
+      "View All": "Ver Todo",
+      "Notifications": "Notificaciones",
+
+      // Common
+      "Loading": "Cargando",
+      "Error": "Error",
+      "Success": "Éxito",
+      "Cancel": "Cancelar",
+      "Confirm": "Confirmar",
+      "Save": "Guardar",
+      "Delete": "Eliminar",
+      "Edit": "Editar",
+      "Back": "Atrás",
+      "Next": "Siguiente",
+      "Submit": "Enviar",
+
+      // Language selector
+      "Language": "Idioma",
+      "Select Language": "Seleccionar Idioma",
+
+      // External Transfer
+      "Please fill in all required recipient details": "Por favor complete todos los detalles requeridos del destinatario",
+      "Account number too short": "Número de cuenta demasiado corto",
+      "Enter valid amount": "Ingrese un monto válido",
+      "Insufficient balance. Required:": "Saldo insuficiente. Requerido:",
+      "including": "incluyendo",
+      "fee": "comisión",
+      "Enter 4-digit PIN": "Ingrese PIN de 4 dígitos",
+      "External transfer to": "Transferencia externa a",
+      "at": "en",
+      "External transfer completed!": "¡Transferencia externa completada!",
+      "Transfer failed": "Transferencia fallida",
+      "External transfer failed. Please try again.": "Transferencia externa fallida. Por favor inténtelo de nuevo.",
+      "External Transfer Completed!": "¡Transferencia Externa Completada!",
+      "sent to": "enviado a",
+      "Processing Fee:": "Comisión de procesamiento:",
+      "New Balance:": "Nuevo Saldo:",
+      "Redirecting...": "Redirigiendo...",
+      "External Transfer": "Transferencia Externa",
+      "Send to external bank accounts": "Enviar a cuentas bancarias externas",
+      "Sending from": "Enviando desde",
+      "Available:": "Disponible:",
+      "Recipient Name": "Nombre del Destinatario",
+      "Full name of recipient": "Nombre completo del destinatario",
+      "Bank Name": "Nombre del Banco",
+      "e.g., Chase Bank, Wells Fargo, Bank of America": "ej., Chase Bank, Wells Fargo, Bank of America",
+      "Account Number": "Número de Cuenta",
+      "Enter recipient's account number": "Ingrese el número de cuenta del destinatario",
+      "Usually 8-17 digits long": "Generalmente de 8-17 dígitos de largo",
+      "Routing Number (Optional)": "Número de Ruta (Opcional)",
+      "9-digit routing number": "Número de ruta de 9 dígitos",
+      "Continue": "Continuar",
+      "Sending to:": "Enviando a:",
+      "Amount": "Monto",
+      "External Transfer Fee:": "Comisión de Transferencia Externa:",
+      "Total Deducted:": "Total Debitado:",
+      "Message (Optional)": "Mensaje (Opcional)",
+      "Purpose of transfer": "Propósito de la transferencia",
+      "Transfer Summary": "Resumen de Transferencia",
+      "Recipient": "Destinatario",
+      "Bank": "Banco",
+      "Account": "Cuenta",
+      "Processing Fee": "Comisión de Procesamiento",
+      "Total": "Total",
+      "Enter Transfer PIN": "Ingrese PIN de Transferencia",
+      "4-digit PIN": "PIN de 4 dígitos",
+      "Processing...": "Procesando...",
+      "Send External Transfer": "Enviar Transferencia Externa",
+
+      // PWA Install
+      "Install Yeet Bank": "Instalar Yeet Bank",
+      "Add to your home screen for quick access": "Agrega a tu pantalla de inicio para acceso rápido",
+      "Tap the share icon then \"Add to Home Screen\"": "Toca el icono compartir y luego \"Agregar a pantalla de inicio\"",
+      "Install": "Instalar",
+    }
+  },
+  pt: {
+    translation: {
+      // Navigation
+      "Dashboard": "Painel de Controle",
+      "Transfer": "Transferir",
+      "Chat": "Chat",
+      "Settings": "Configurações",
+      "Logout": "Sair",
+
+      // Auth
+      "Login": "Entrar",
+      "Register": "Registrar",
+      "Email": "E-mail",
+      "Password": "Senha",
+      "Confirm Password": "Confirmar Senha",
+      "First Name": "Nome",
+      "Last Name": "Sobrenome",
+      "Phone": "Telefone",
+      "Welcome back": "Bem-vindo de volta",
+      "Create Account": "Criar Conta",
+
+      // Dashboard
+      "Account Balance": "Saldo da Conta",
+      "Recent Transactions": "Transações Recentes",
+      "Transfer Money": "Transferir Dinheiro",
+      "View All": "Ver Tudo",
+      "Notifications": "Notificações",
+
+      // Common
+      "Loading": "Carregando",
+      "Error": "Erro",
+      "Success": "Sucesso",
+      "Cancel": "Cancelar",
+      "Confirm": "Confirmar",
+      "Save": "Salvar",
+      "Delete": "Excluir",
+      "Edit": "Editar",
+      "Back": "Voltar",
+      "Next": "Próximo",
+      "Submit": "Enviar",
+
+      // Language selector
+      "Language": "Idioma",
+      "Select Language": "Selecionar Idioma",
+
+      // External Transfer
+      "Please fill in all required recipient details": "Por favor preencha todos os detalhes necessários do destinatário",
+      "Account number too short": "Número da conta muito curto",
+      "Enter valid amount": "Digite um valor válido",
+      "Insufficient balance. Required:": "Saldo insuficiente. Necessário:",
+      "including": "incluindo",
+      "fee": "taxa",
+      "Enter 4-digit PIN": "Digite PIN de 4 dígitos",
+      "External transfer to": "Transferência externa para",
+      "at": "em",
+      "External transfer completed!": "Transferência externa concluída!",
+      "Transfer failed": "Transferência falhou",
+      "External transfer failed. Please try again.": "Transferência externa falhou. Por favor tente novamente.",
+      "External Transfer Completed!": "Transferência Externa Concluída!",
+      "sent to": "enviado para",
+      "Processing Fee:": "Taxa de Processamento:",
+      "New Balance:": "Novo Saldo:",
+      "Redirecting...": "Redirecionando...",
+      "External Transfer": "Transferência Externa",
+      "Send to external bank accounts": "Enviar para contas bancárias externas",
+      "Sending from": "Enviando de",
+      "Available:": "Disponível:",
+      "Recipient Name": "Nome do Destinatário",
+      "Full name of recipient": "Nome completo do destinatário",
+      "Bank Name": "Nome do Banco",
+      "e.g., Chase Bank, Wells Fargo, Bank of America": "ex., Chase Bank, Wells Fargo, Bank of America",
+      "Account Number": "Número da Conta",
+      "Enter recipient's account number": "Digite o número da conta do destinatário",
+      "Usually 8-17 digits long": "Geralmente com 8-17 dígitos",
+      "Routing Number (Optional)": "Número de Roteamento (Opcional)",
+      "9-digit routing number": "Número de roteamento de 9 dígitos",
+      "Continue": "Continuar",
+      "Sending to:": "Enviando para:",
+      "Amount": "Valor",
+      "External Transfer Fee:": "Taxa de Transferência Externa:",
+      "Total Deducted:": "Total Debitado:",
+      "Message (Optional)": "Mensagem (Opcional)",
+      "Purpose of transfer": "Propósito da transferência",
+      "Transfer Summary": "Resumo da Transferência",
+      "Recipient": "Destinatário",
+      "Bank": "Banco",
+      "Account": "Conta",
+      "Processing Fee": "Taxa de Processamento",
+      "Total": "Total",
+      "Enter Transfer PIN": "Digite PIN de Transferência",
+      "4-digit PIN": "PIN de 4 dígitos",
+      "Processing...": "Processando...",
+      "Send External Transfer": "Enviar Transferência Externa",
+
+      // PWA Install
+      "Install Yeet Bank": "Instalar Yeet Bank",
+      "Add to your home screen for quick access": "Adicione à sua tela inicial para acesso rápido",
+      "Tap the share icon then \"Add to Home Screen\"": "Toque o ícone compartilhar e depois \"Adicionar à Tela Inicial\"",
+      "Install": "Instalar",
+    }
+  },
+  ja: {
+    translation: {
+      // Navigation
+      "Dashboard": "ダッシュボード",
+      "Transfer": "送金",
+      "Chat": "チャット",
+      "Settings": "設定",
+      "Logout": "ログアウト",
+
+      // Auth
+      "Login": "ログイン",
+      "Register": "登録",
+      "Email": "メールアドレス",
+      "Password": "パスワード",
+      "Confirm Password": "パスワード確認",
+      "First Name": "名",
+      "Last Name": "姓",
+      "Phone": "電話番号",
+      "Welcome back": "おかえりなさい",
+      "Create Account": "アカウント作成",
+
+      // Dashboard
+      "Account Balance": "口座残高",
+      "Recent Transactions": "最近の取引",
+      "Transfer Money": "送金",
+      "View All": "すべて表示",
+      "Notifications": "通知",
+
+      // Common
+      "Loading": "読み込み中",
+      "Error": "エラー",
+      "Success": "成功",
+      "Cancel": "キャンセル",
+      "Confirm": "確認",
+      "Save": "保存",
+      "Delete": "削除",
+      "Edit": "編集",
+      "Back": "戻る",
+      "Next": "次へ",
+      "Submit": "送信",
+
+      // Language selector
+      "Language": "言語",
+      "Select Language": "言語を選択",
+
+      // External Transfer
+      "Please fill in all required recipient details": "すべての必須の受取人詳細を入力してください",
+      "Account number too short": "口座番号が短すぎます",
+      "Enter valid amount": "有効な金額を入力してください",
+      "Insufficient balance. Required:": "残高不足。必要:",
+      "including": "含む",
+      "fee": "手数料",
+      "Enter 4-digit PIN": "4桁のPINを入力してください",
+      "External transfer to": "外部送金先",
+      "at": "の",
+      "External transfer completed!": "外部送金が完了しました！",
+      "Transfer failed": "送金に失敗しました",
+      "External transfer failed. Please try again.": "外部送金に失敗しました。もう一度お試しください。",
+      "External Transfer Completed!": "外部送金完了！",
+      "sent to": "送金先",
+      "Processing Fee:": "処理手数料:",
+      "New Balance:": "新しい残高:",
+      "Redirecting...": "リダイレクト中...",
+      "External Transfer": "外部送金",
+      "Send to external bank accounts": "外部銀行口座に送金",
+      "Sending from": "送金元",
+      "Available:": "利用可能:",
+      "Recipient Name": "受取人名",
+      "Full name of recipient": "受取人のフルネーム",
+      "Bank Name": "銀行名",
+      "e.g., Chase Bank, Wells Fargo, Bank of America": "例: Chase Bank, Wells Fargo, Bank of America",
+      "Account Number": "口座番号",
+      "Enter recipient's account number": "受取人の口座番号を入力してください",
+      "Usually 8-17 digits long": "通常8-17桁の長さ",
+      "Routing Number (Optional)": "ルーティング番号（オプション）",
+      "9-digit routing number": "9桁のルーティング番号",
+      "Continue": "続ける",
+      "Sending to:": "送金先:",
+      "Amount": "金額",
+      "External Transfer Fee:": "外部送金手数料:",
+      "Total Deducted:": "合計引き出し額:",
+      "Message (Optional)": "メッセージ（オプション）",
+      "Purpose of transfer": "送金の目的",
+      "Transfer Summary": "送金概要",
+      "Recipient": "受取人",
+      "Bank": "銀行",
+      "Account": "口座",
+      "Processing Fee": "処理手数料",
+      "Total": "合計",
+      "Enter Transfer PIN": "送金PINを入力してください",
+      "4-digit PIN": "4桁PIN",
+      "Processing...": "処理中...",
+      "Send External Transfer": "外部送金を実行",
+
+      // PWA Install
+      "Install Yeet Bank": "Yeet Bankをインストール",
+      "Add to your home screen for quick access": "ホーム画面に追加してすばやくアクセス",
+      "Tap the share icon then \"Add to Home Screen\"": "シェアアイコンをタップして「ホーム画面に追加」を選択",
+      "Install": "インストール",
+    }
+  }
+};
+
+i18n
+  .use(LanguageDetector)
+  .use(initReactI18next)
+  .init({
+    resources,
+    fallbackLng: 'en',
+    debug: false,
+
+    interpolation: {
+      escapeValue: false, // React already does escaping
+    },
+
+    detection: {
+      order: ['localStorage', 'navigator', 'htmlTag'],
+      caches: ['localStorage'],
+      lookupLocalStorage: 'i18nextLng',
+      checkWhitelist: true,
+    },
+
+    whitelist: ['en', 'es', 'pt', 'ja'],
+  });
+
+export default i18n;

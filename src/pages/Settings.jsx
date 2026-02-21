@@ -1,13 +1,15 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { AuthContext } from '../context/AuthContext';
 import { authApi, userApi, transferApi } from '../services/api';
-import { ArrowLeft, Lock, Key, LogOut, AlertTriangle, CheckCircle } from 'react-feather';
+import { ArrowLeft, Lock, Key, LogOut, AlertTriangle } from 'react-feather';
 import toast from 'react-hot-toast';
 
 const Settings = () => {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [activeSection, setActiveSection] = useState(null);
   const [currentPin, setCurrentPin] = useState('');
   const [newPin, setNewPin] = useState('');

@@ -1,13 +1,16 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { AuthContext } from '../context/AuthContext';
 import { transferApi, notificationApi } from '../services/api';
-import { Send, DollarSign, MessageCircle, Settings, Eye, EyeOff, Copy, Check, TrendingUp, TrendingDown, Bell, Plus, Clock, Mail, MessageSquare } from 'react-feather';
-import toast from 'react-hot-toast';
+import { Send, DollarSign, MessageCircle, Settings, Eye, EyeOff, Copy, Check, TrendingUp, TrendingDown, Bell, Plus, Clock } from 'react-feather';
+import LanguageSelector from '../components/Common/LanguageSelector';
+import InstallPromptBanner from '../components/Common/InstallPromptBanner';
 
 const Dashboard = () => {
-  const { user, logout, fetchCurrentUser, updateUser } = useContext(AuthContext);
+  const { user, fetchCurrentUser } = useContext(AuthContext);
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [showBalance, setShowBalance] = useState(true);
   const [copiedField, setCopiedField] = useState(null);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -190,6 +193,9 @@ const Dashboard = () => {
           
           {/* Right Icons */}
           <div className="flex items-center gap-4">
+            {/* Language Selector */}
+            <LanguageSelector />
+            
             {/* Notifications */}
             <button 
               onClick={handleShowNotifications}
@@ -425,6 +431,9 @@ const Dashboard = () => {
         </div>
       )}
 
+      {/* PWA Install Banner */}
+      <InstallPromptBanner />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Main Account Card */}
         <div className="bg-[#004aad] rounded-2xl shadow-xl p-8 text-white mb-8 animate-fade-in-scale">
@@ -467,7 +476,7 @@ const Dashboard = () => {
                 className="flex-1 flex items-center justify-center gap-2 bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-all font-semibold text-sm"
               >
                 <Plus size={18} />
-                Add Money
+                {t('Transfer Money')}
               </button>
               <button
                 onClick={() => setShowHistoryModal(true)}
@@ -500,7 +509,7 @@ const Dashboard = () => {
             <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-2">
               <Settings size={20} className="text-white" />
             </div>
-            <h3 className="font-semibold text-white text-xs">Settings</h3>
+            <h3 className="font-semibold text-white text-xs">{t('Settings')}</h3>
             <p className="text-gray-300 text-xs mt-0.5">Manage account</p>
           </button>
         </div>
@@ -510,7 +519,7 @@ const Dashboard = () => {
           <div className="lg:col-span-2">
             <div className="bg-gradient-to-br from-[#071c2b] to-[#0a2a4a] rounded-2xl shadow-lg border border-[#0a2a4a]/50 p-6 backdrop-blur-sm">
               <div className="flex items-center justify-between mb-8">
-                <h2 className="text-2xl font-bold text-white">Recent Activity</h2>
+                <h2 className="text-2xl font-bold text-white">{t('Recent Transactions')}</h2>
                 <div className="w-10 h-10 rounded-lg bg-[#004aad]/20 flex items-center justify-center">
                   <Clock size={20} className="text-[#004aad]" />
                 </div>
@@ -577,45 +586,6 @@ const Dashboard = () => {
                   </div>
                   ))
                 )}
-              </div>
-            </div>
-          </div>
-
-          {/* Contact Section */}
-          <div className="lg:col-span-1">
-            <div className="bg-gradient-to-br from-[#071c2b] to-[#0a2a4a] rounded-2xl shadow-lg border border-[#0a2a4a]/50 p-6 mb-6 backdrop-blur-sm">
-              <h3 className="text-lg font-bold text-white mb-4">Contact Us</h3>
-              <div className="space-y-3">
-                <button
-                  onClick={() => window.open(`mailto:${user?.email || 'support@yeetbank.com'}`)}
-                  className="w-full flex items-center justify-between p-3 bg-[#071c2b]/50 hover:bg-[#0a2a4a] rounded-lg transition-all border border-[#0a2a4a]/30 hover:border-blue-500/50"
-                >
-                  <div className="flex items-center gap-2">
-                    <Mail size={18} className="text-blue-400" />
-                    <span className="text-sm font-semibold text-white">Email</span>
-                  </div>
-                  <span className="text-xs text-blue-400">{user?.email || 'contact us'}</span>
-                </button>
-                <button
-                  onClick={() => toast.info('WhatsApp feature coming soon!')}
-                  className="w-full flex items-center justify-between p-3 bg-[#071c2b]/50 hover:bg-[#0a2a4a] rounded-lg transition-all border border-[#0a2a4a]/30 hover:border-green-500/50"
-                >
-                  <div className="flex items-center gap-2">
-                    <MessageSquare size={18} className="text-green-400" />
-                    <span className="text-sm font-semibold text-white">WhatsApp</span>
-                  </div>
-                  <span className="text-xs text-green-400">+1 (555) 123-4567</span>
-                </button>
-                <button
-                  onClick={() => toast.info('Telegram feature coming soon!')}
-                  className="w-full flex items-center justify-between p-3 bg-[#071c2b]/50 hover:bg-[#0a2a4a] rounded-lg transition-all border border-[#0a2a4a]/30 hover:border-cyan-500/50"
-                >
-                  <div className="flex items-center gap-2">
-                    <Send size={18} className="text-cyan-400" />
-                    <span className="text-sm font-semibold text-white">Telegram</span>
-                  </div>
-                  <span className="text-xs text-cyan-400">@yeetbanksupport</span>
-                </button>
               </div>
             </div>
           </div>

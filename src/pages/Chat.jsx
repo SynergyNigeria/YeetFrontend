@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ArrowLeft, Send, MessageCircle, User, Camera, Headphones } from 'react-feather';
 import { chatApi } from '../services/api';
 import { AuthContext } from '../context/AuthContext';
@@ -11,6 +12,7 @@ const Chat = () => {
   const [otherUserTyping, setOtherUserTyping] = useState(false);
   const fileInputRef = useRef(null);
   const { user } = useContext(AuthContext);
+  const { t } = useTranslation();
   const pollIntervalRef = useRef(null);
   const typingPollRef = useRef(null);
   const typingTimeoutRef = useRef(null);

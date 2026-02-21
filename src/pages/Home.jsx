@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { ArrowRight, Lock, Zap, Shield, Smartphone, TrendingUp, Users } from 'react-feather';
 
 const Home = () => {
+  const { t } = useTranslation();
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
@@ -19,13 +21,13 @@ const Home = () => {
               to="/login" 
               className="px-5 py-2 text-[#2c3968] font-medium hover:bg-gray-100/50 rounded-lg transition-all duration-200"
             >
-              Login
+              {t('Login')}
             </Link>
             <Link
               to="/register"
               className="px-5 py-2 bg-[#2c3968] text-white rounded-lg hover:shadow-lg hover:scale-105 transition-all duration-200 font-medium"
             >
-              Sign Up
+              {t('Register')}
             </Link>
           </div>
         </div>

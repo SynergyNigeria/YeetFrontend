@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { AuthContext } from '../context/AuthContext';
 import { transferApi } from '../services/api';
 import { ArrowLeft, Send, CheckCircle, Lock } from 'react-feather';
@@ -8,6 +9,7 @@ import toast from 'react-hot-toast';
 const WireTransfer = () => {
   const { user, updateUser } = useContext(AuthContext);
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [currentStep, setCurrentStep] = useState(1);
   const [bankName, setBankName] = useState('');
   const [accountNumber, setAccountNumber] = useState('');

@@ -81,8 +81,8 @@ export async function subscribeToPushNotifications(registration) {
     console.log('Subscribed to push notifications:', subscription);
     return subscription;
   } catch (error) {
-    console.error('Failed to subscribe to push notifications:', error);
-    throw error;
+    // Push service may be unavailable in dev/offline — fail silently
+    return null;
   }
 }
 
@@ -146,14 +146,14 @@ export async function initializePushNotifications(api) {
     const subscription = await subscribeToPushNotifications(registration);
     
     if (subscription) {
-      await sendSubscriptionToServer(subscription, api);
+      await sendSubscriptionToServer(subscription, api).catch(() => null);
       return subscription;
     }
     
     return null;
   } catch (error) {
-    console.error('Failed to initialize push notifications:', error);
-    throw error;
+    // Fail silently — push notifications are optional
+    return null;
   }
 }
 

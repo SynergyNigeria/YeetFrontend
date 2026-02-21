@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { AuthContext } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import { Mail, Lock, User, Phone, MapPin, Globe, Eye, EyeOff, ChevronRight, ChevronLeft } from 'react-feather';
@@ -21,6 +22,7 @@ const Register = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const { register } = useContext(AuthContext);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -377,10 +379,10 @@ const Register = () => {
                     {isLoading ? (
                       <span className="flex items-center justify-center gap-2">
                         <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
-                        Creating...
+                        {t('Loading')}...
                       </span>
                     ) : (
-                      'Create Account'
+                      t('Create Account')
                     )}
                   </button>
                 )}
@@ -558,10 +560,10 @@ const Register = () => {
                 {isLoading ? (
                   <span className="flex items-center justify-center gap-2">
                     <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
-                    Creating Account...
+                    {t('Loading')}...
                   </span>
                 ) : (
-                  'Create Account'
+                  t('Create Account')
                 )}
               </button>
             </div>
