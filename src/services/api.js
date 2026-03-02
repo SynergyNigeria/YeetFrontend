@@ -123,7 +123,17 @@ export const authApi = {
   updateProfile: async (updates) => {
     const response = await api.put('/user/profile/', updates);
     return response.data;
-  }
+  },
+
+  forgotPassword: async (email) => {
+    const response = await api.post('/auth/forgot-password/', { email });
+    return response.data;
+  },
+
+  resetPassword: async (uid, token, new_password) => {
+    const response = await api.post('/auth/reset-password/', { uid, token, new_password });
+    return response.data;
+  },
 };
 
 export const userApi = {

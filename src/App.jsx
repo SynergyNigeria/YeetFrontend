@@ -19,6 +19,8 @@ import ExternalTransfer from './pages/ExternalTransfer';
 import Chat from './pages/Chat';
 import Admin from './pages/Admin';
 import Settings from './pages/Settings';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 
 // Components
 import PrivateRoute from './components/Common/PrivateRoute';
@@ -64,6 +66,8 @@ function AppRouter() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
         {/* Protected Routes */}
         <Route element={<PrivateRoute />}>
