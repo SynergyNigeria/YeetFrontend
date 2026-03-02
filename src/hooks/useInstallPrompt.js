@@ -64,15 +64,27 @@ const useInstallPrompt = () => {
   }, []);
 
   const triggerInstall = async () => {
-    if (!deferredPrompt) return;
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    if (outcome === 'accepted') {
-      setIsInstalled(true);
-      setIsInstallable(false);
-      window.__pwaInstallEvent = null;
+    // Fall back to the global capture in case React state is stale
+    const prompt = deferredPrompt || window.__pwaInstallEvent;
+    if (!prompt) {
+      console.warn('[PWA] No install prompt available. Is the app already installed or has the prompt already been used?');
+      return false;
     }
-    setDeferredPrompt(null);
+    try {
+      prompt.prompt();
+      const { outcome } = await prompt.userChoice;
+      console.log('[PWA] Install prompt outcome:', outcome);
+      if (outcome === 'accepted') {
+        setIsInstalled(true);
+        setIsInstallable(false);
+        window.__pwaInstallEvent = null;
+      }
+      setDeferredPrompt(null);
+      return outcome === 'accepted';
+    } catch (err) {
+      console.error('[PWA] Install prompt error:', err);
+      return false;
+    }
   };
 
   const dismissPrompt = () => {
