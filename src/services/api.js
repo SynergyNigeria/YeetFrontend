@@ -30,10 +30,10 @@ api.interceptors.response.use(
       try {
         const refreshToken = localStorage.getItem('refresh_token');
         if (!refreshToken) {
-          // No refresh token, redirect to login
+          // No refresh token — signal logout via event so React Router handles navigation
           localStorage.removeItem('access_token');
           localStorage.removeItem('refresh_token');
-          window.location.href = '/login';
+          window.dispatchEvent(new CustomEvent('auth:logout'));
           return Promise.reject(error);
         }
 
@@ -50,10 +50,17 @@ api.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${response.data.access}`;
         return api(originalRequest);
       } catch (refreshError) {
-        console.error('Token refresh failed:', refreshError);
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
-        window.location.href = '/login';
+        // Only force logout if we got an auth-related HTTP response (token truly invalid).
+        // If there is no response (network error / backend waking up), do NOT log out —
+        // the tokens are still valid and the backend is just temporarily unreachable.
+        if (refreshError.response) {
+          console.error('Token refresh failed (auth error):', refreshError);
+          localStorage.removeItem('access_token');
+          localStorage.removeItem('refresh_token');
+          window.dispatchEvent(new CustomEvent('auth:logout'));
+        } else {
+          console.warn('Token refresh failed (network error — backend may be waking up):', refreshError.message);
+        }
         return Promise.reject(refreshError);
       }
     }

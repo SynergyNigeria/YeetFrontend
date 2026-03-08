@@ -1,4 +1,5 @@
 import React, { createContext, useState, useCallback, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 // import mockApi from '../services/mockApi'; // Disabled - using real API now
 import { authApi, notificationApi } from '../services/api'; // Real API enabled
 import { initializePushNotifications } from '../services/pushNotifications';
@@ -11,6 +12,21 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
+  // Listen for forced logout events dispatched by the API interceptor.
+  // Using a React Router navigate keeps navigation client-side—no full-page
+  // reload, so the server never gets a request for a non-existent HTML path.
+  useEffect(() => {
+    const handleAuthLogout = () => {
+      setUser(null);
+      setIsAuthenticated(false);
+      setError(null);
+      navigate('/login', { replace: true });
+    };
+    window.addEventListener('auth:logout', handleAuthLogout);
+    return () => window.removeEventListener('auth:logout', handleAuthLogout);
+  }, [navigate]);
 
   // Check if user is already logged in
   useEffect(() => {
@@ -46,11 +62,23 @@ export const AuthProvider = ({ children }) => {
         // Don't throw - push notifications are optional
       }
     } catch (err) {
-      console.error('Failed to fetch current user:', err.response?.data || err.message);
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('refresh_token');
-      setUser(null);
-      setIsAuthenticated(false);
+      const isAuthError = err.response && (err.response.status === 401 || err.response.status === 403);
+      if (isAuthError) {
+        // Token is genuinely invalid/expired — clear it and mark as unauthenticated.
+        console.error('Auth token rejected by server:', err.response?.data || err.message);
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        setUser(null);
+        setIsAuthenticated(false);
+      } else {
+        // Network error (backend waking up from spin-down, or request timeout).
+        // Tokens are likely still valid — do NOT clear them.
+        // The app will show as unauthenticated for now; the user can reload or
+        // retry once the backend is back up without having to log in again.
+        console.warn('Network error during session check (backend may be starting):', err.message);
+        setUser(null);
+        setIsAuthenticated(false);
+      }
     } finally {
       setIsLoading(false);
     }
