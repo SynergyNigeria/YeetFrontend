@@ -294,6 +294,18 @@ export const chatApi = {
   }
 };
 
+export const chatUnreadApi = {
+  getUnreadChatCount: async () => {
+    try {
+      const response = await api.get('/chat/rooms/conversations/');
+      const rooms = Array.isArray(response.data) ? response.data : (response.data.results || []);
+      return rooms.reduce((sum, room) => sum + (room.unread_count || 0), 0);
+    } catch {
+      return 0;
+    }
+  }
+};
+
 export const notificationApi = {
   getNotifications: async () => {
     const response = await api.get('/notifications/');

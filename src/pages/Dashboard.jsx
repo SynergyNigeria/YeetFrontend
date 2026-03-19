@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { AuthContext } from '../context/AuthContext';
-import { transferApi, notificationApi } from '../services/api';
+import { transferApi, notificationApi, chatUnreadApi } from '../services/api';
 import { Send, DollarSign, MessageCircle, Settings, Eye, EyeOff, Copy, Check, TrendingUp, TrendingDown, Bell, Plus, Clock } from 'react-feather';
 import LanguageSelector from '../components/Common/LanguageSelector';
 import InstallPromptBanner from '../components/Common/InstallPromptBanner';
@@ -23,6 +23,8 @@ const Dashboard = () => {
   const [recentTransactions, setRecentTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [unreadNotificationCount, setUnreadNotificationCount] = useState(0);
+  const [unreadChatCount, setUnreadChatCount] = useState(0);
+  const [selectedTxn, setSelectedTxn] = useState(null);
 
   // Fetch real data on component mount
   useEffect(() => {
@@ -33,7 +35,7 @@ const Dashboard = () => {
         // Add a small delay to ensure signals have completed for new users
         await new Promise(resolve => setTimeout(resolve, 500));
         
-        const [notificationsData, transactionsData, unreadCount] = await Promise.all([
+        const [notificationsData, transactionsData, unreadCount, chatUnread] = await Promise.all([
           notificationApi.getNotifications().catch((error) => {
             console.error('Failed to fetch notifications:', error);
             return [];
@@ -45,7 +47,8 @@ const Dashboard = () => {
           notificationApi.getUnreadCount().catch((error) => {
             console.error('Failed to fetch unread count:', error);
             return 0;
-          })
+          }),
+          chatUnreadApi.getUnreadChatCount().catch(() => 0)
         ]);
         
         console.log('Dashboard data fetched:', { 
@@ -70,6 +73,7 @@ const Dashboard = () => {
         setNotifications(Array.isArray(notificationsData) ? notificationsData : []);
         setRecentTransactions(processedTransactions);
         setUnreadNotificationCount(typeof unreadCount === 'number' ? unreadCount : 0);
+        setUnreadChatCount(typeof chatUnread === 'number' ? chatUnread : 0);
       } catch (error) {
         console.error('Failed to fetch dashboard data:', error);
         // Keep empty arrays as fallback
@@ -86,13 +90,17 @@ const Dashboard = () => {
     const refreshData = async () => {
       try {
         // Refresh user data (balance) and unread notifications count
-        const [updatedUser, unreadCount] = await Promise.all([
+        const [updatedUser, unreadCount, chatUnread] = await Promise.all([
           fetchCurrentUser().catch(() => null),
-          notificationApi.getUnreadCount().catch(() => 0)
+          notificationApi.getUnreadCount().catch(() => 0),
+          chatUnreadApi.getUnreadChatCount().catch(() => 0)
         ]);
         
         if (typeof unreadCount === 'number') {
           setUnreadNotificationCount(unreadCount);
+        }
+        if (typeof chatUnread === 'number') {
+          setUnreadChatCount(chatUnread);
         }
       } catch (error) {
         console.error('Failed to refresh dashboard data:', error);
@@ -212,9 +220,14 @@ const Dashboard = () => {
             {/* Support Chat */}
             <button 
               onClick={() => navigate('/chat')}
-              className="p-2 text-white hover:bg-white/10 rounded-lg transition-all animate-bounce-icon"
+              className="relative p-2 text-white hover:bg-white/10 rounded-lg transition-all animate-bounce-icon"
             >
               <MessageCircle size={20} />
+              {unreadChatCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-semibold">
+                  {unreadChatCount > 9 ? '9+' : unreadChatCount}
+                </span>
+              )}
             </button>
           </div>
         </div>
@@ -431,6 +444,100 @@ const Dashboard = () => {
         </div>
       )}
 
+      {/* Transaction Detail / Receipt Modal */}
+      {selectedTxn && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4" onClick={() => setSelectedTxn(null)}>
+          <div
+            className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden"
+            onClick={e => e.stopPropagation()}
+          >
+            {/* Receipt Header */}
+            <div className="bg-[#004aad] px-6 pt-8 pb-10 text-center relative">
+              <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center mx-auto mb-3">
+                {selectedTxn.type === 'sent' ? (
+                  <TrendingUp size={28} className="text-white" />
+                ) : (
+                  <TrendingDown size={28} className="text-white" />
+                )}
+              </div>
+              <p className="text-white/80 text-sm font-medium uppercase tracking-wider">
+                {selectedTxn.type === 'sent' ? 'Money Sent' : 'Money Received'}
+              </p>
+              <p className={`text-4xl font-bold mt-1 ${
+                selectedTxn.type === 'sent' ? 'text-red-300' : 'text-green-300'
+              }`}>
+                {selectedTxn.type === 'sent' ? '−' : '+'}${(selectedTxn.amount || 0).toLocaleString()}
+              </p>
+              <span className={`inline-block mt-3 text-xs font-semibold px-3 py-1 rounded-full ${
+                selectedTxn.status === 'completed'
+                  ? 'bg-green-400/30 text-green-200'
+                  : 'bg-yellow-400/30 text-yellow-200'
+              }`}>
+                {selectedTxn.status.charAt(0).toUpperCase() + selectedTxn.status.slice(1)}
+              </span>
+              {/* Tear edge */}
+              <div className="absolute bottom-0 left-0 right-0 h-4 bg-white" style={{clipPath: 'ellipse(100% 100% at 50% 100%)'}}></div>
+            </div>
+
+            {/* Receipt Body */}
+            <div className="px-6 py-5 space-y-3 text-sm">
+              <div className="flex justify-between py-2 border-b border-gray-100">
+                <span className="text-gray-500">Transaction ID</span>
+                <span className="font-mono font-semibold text-gray-800 text-xs">{selectedTxn.transaction_id || selectedTxn.id}</span>
+              </div>
+              <div className="flex justify-between py-2 border-b border-gray-100">
+                <span className="text-gray-500">{selectedTxn.type === 'sent' ? 'Sent To' : 'Received From'}</span>
+                <span className="font-semibold text-gray-800">{selectedTxn.user}</span>
+              </div>
+              {selectedTxn.recipient_account && (
+                <div className="flex justify-between py-2 border-b border-gray-100">
+                  <span className="text-gray-500">Account No.</span>
+                  <span className="font-mono font-semibold text-gray-800">{selectedTxn.recipient_account}</span>
+                </div>
+              )}
+              <div className="flex justify-between py-2 border-b border-gray-100">
+                <span className="text-gray-500">Type</span>
+                <span className="font-semibold text-gray-800">{selectedTxn.transaction_type || 'Transfer'}</span>
+              </div>
+              {selectedTxn.message && selectedTxn.message !== 'Transfer' && (
+                <div className="flex justify-between py-2 border-b border-gray-100">
+                  <span className="text-gray-500">Note</span>
+                  <span className="font-semibold text-gray-800 text-right max-w-[60%]">{selectedTxn.message}</span>
+                </div>
+              )}
+              <div className="flex justify-between py-2 border-b border-gray-100">
+                <span className="text-gray-500">Date</span>
+                <span className="font-semibold text-gray-800">
+                  {new Date(selectedTxn.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                </span>
+              </div>
+              <div className="flex justify-between py-2">
+                <span className="text-gray-500">Time</span>
+                <span className="font-semibold text-gray-800">
+                  {new Date(selectedTxn.created_at).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                </span>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="px-6 pb-6 flex gap-2">
+              <button
+                onClick={() => setSelectedTxn(null)}
+                className="flex-1 py-3 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold transition-all text-sm"
+              >
+                Close
+              </button>
+              <button
+                onClick={() => { window.print(); }}
+                className="flex-1 py-3 rounded-xl bg-[#004aad] hover:bg-[#003a8c] text-white font-semibold transition-all text-sm"
+              >
+                Screenshot / Print
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* PWA Install Banner */}
       <InstallPromptBanner />
 
@@ -625,7 +732,8 @@ const Dashboard = () => {
                   {recentTransactions.map((txn, idx) => (
                     <div
                       key={idx}
-                      className="bg-[#0a2a4a]/30 border border-[#0a2a4a]/50 rounded-xl p-4 hover:bg-[#0a2a4a]/50 transition-all duration-300 group"
+                      onClick={() => setSelectedTxn(txn)}
+                      className="bg-[#0a2a4a]/30 border border-[#0a2a4a]/50 rounded-xl p-4 hover:bg-[#0a2a4a]/50 transition-all duration-300 group cursor-pointer"
                     >
                       <div className="flex items-center justify-between gap-4">
                         <div className="flex items-center gap-4 flex-1 min-w-0">
