@@ -13,17 +13,22 @@ const WireTransfer = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [bankName, setBankName] = useState('');
   const [accountNumber, setAccountNumber] = useState('');
-  const [ifscCode, setIfscCode] = useState('');
+
   const [recipientName, setRecipientName] = useState('');
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
   const [pin, setPin] = useState('');
+  const [ifscSender, setIfscSender] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [transferSuccess, setTransferSuccess] = useState(false);
 
   const handleRecipientSubmit = () => {
-    if (!bankName || !accountNumber || !ifscCode || !recipientName) {
+    if (!bankName || !accountNumber || !recipientName) {
       toast.error('Please fill in all recipient details');
+      return;
+    }
+    if (!ifscSender || ifscSender.trim().length < 4) {
+      toast.error('Please enter your IFSC code to proceed or contact support to get one');
       return;
     }
     setCurrentStep(2);
@@ -53,11 +58,11 @@ const WireTransfer = () => {
         recipient_info: {
           name: recipientName,
           bank: bankName,
-          account: accountNumber,
-          ifsc: ifscCode
+          account: accountNumber
         },
         amount: parseFloat(amount),
         transfer_pin: pin,
+        ifsc_code: ifscSender.trim().toUpperCase(),
         message: description || `Wire transfer to ${recipientName}`
       });
 
@@ -207,16 +212,17 @@ const WireTransfer = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-900 mb-2">
-                IFSC Code *
+                Your IFSC Code *
               </label>
               <input
                 type="text"
-                value={ifscCode}
-                onChange={(e) => setIfscCode(e.target.value.toUpperCase())}
-                placeholder="e.g., HDFC0001234"
-                className="w-full border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 outline-none py-3 px-4 focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                value={ifscSender}
+                onChange={(e) => setIfscSender(e.target.value.toUpperCase())}
+                placeholder={(user?.ifsc_verified && user?.ifsc_code) ? user.ifsc_code : 'IFSC code'}
+                className="w-full border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 outline-none py-3 px-4 focus:ring-2 focus:ring-gray-900 focus:border-transparent font-mono"
                 disabled={isLoading}
               />
+              <p className="text-xs text-gray-500 mt-1">Find your IFSC code on your Dashboard or Settings page.</p>
             </div>
 
             <button

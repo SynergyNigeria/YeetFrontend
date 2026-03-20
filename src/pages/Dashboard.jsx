@@ -559,6 +559,23 @@ const Dashboard = () => {
                 <Copy size={16} />
               )}
             </button>
+            {user?.ifsc_code && (
+              user?.ifsc_verified ? (
+                <button
+                  onClick={() => copyToClipboard(user.ifsc_code, 'ifscCode')}
+                  className="flex items-center gap-2 text-white/60 hover:text-white transition-all mt-1"
+                >
+                  <span className="font-mono text-xs">IFSC: {user.ifsc_code}</span>
+                  {copiedField === 'ifscCode' ? (
+                    <Check size={14} className="text-green-300" />
+                  ) : (
+                    <Copy size={14} />
+                  )}
+                </button>
+              ) : (
+                <p className="font-mono text-xs text-white/50 mt-1">IFSC: *** <span className="text-white/40 text-[10px] normal-case">pending verification</span></p>
+              )
+            )}
           </div>
 
           {/* Balance Section */}

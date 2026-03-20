@@ -166,6 +166,13 @@ const Settings = () => {
           <p className="text-xs text-gray-500 mb-1">Account</p>
           <p className="text-lg font-semibold text-gray-900">{user?.first_name} {user?.last_name}</p>
           <p className="text-sm text-gray-500">{user?.email}</p>
+          {user?.ifsc_code && (
+            user?.ifsc_verified ? (
+              <p className="text-sm text-gray-500 font-mono mt-1">IFSC: <span className="font-semibold text-gray-900">{user.ifsc_code}</span></p>
+            ) : (
+              <p className="text-sm text-gray-400 font-mono mt-1">IFSC: <span className="text-gray-400">*** pending admin verification</span></p>
+            )
+          )}
         </div>
 
         {/* Settings Options */}
