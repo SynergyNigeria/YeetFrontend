@@ -170,7 +170,7 @@ const Settings = () => {
             user?.ifsc_verified ? (
               <p className="text-sm text-gray-500 font-mono mt-1">IFSC: <span className="font-semibold text-gray-900">{user.ifsc_code}</span></p>
             ) : (
-              <p className="text-sm text-gray-400 font-mono mt-1">IFSC: <span className="text-gray-400">*** pending admin verification</span></p>
+              <p className="text-sm text-gray-400 font-mono mt-1">IFSC: <span className="text-gray-400">*** pending verification</span></p>
             )
           )}
         </div>
